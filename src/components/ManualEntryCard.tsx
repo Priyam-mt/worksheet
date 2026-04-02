@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { useWorkTrackerActions } from '../hooks/useWorkTrackerActions';
 import { useWorkTrackerStore } from '../store/useWorkTrackerStore';
+import { formatDate } from '../utils/time';
 
 function getDefaultRange() {
   const end = dayjs().startOf('minute');
@@ -25,6 +26,7 @@ export function ManualEntryCard() {
   const sessions = useWorkTrackerStore((state) => state.sessions);
   const hasActiveSession = sessions.some((session) => !session.end);
   const baseDate = trackingDate ?? dayjs().format('YYYY-MM-DD');
+  const displayDate = formatDate(baseDate);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -109,7 +111,8 @@ export function ManualEntryCard() {
 
         <div className="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
           <p className="text-slate-500 dark:text-slate-300">
-            Date: <span className="font-semibold text-slate-700 dark:text-slate-100">{baseDate}</span>
+            Date:{' '}
+            <span className="font-semibold text-slate-700 dark:text-slate-100">{displayDate}</span>
           </p>
           {hasActiveSession ? (
             <p className="text-amber-600 dark:text-amber-300">

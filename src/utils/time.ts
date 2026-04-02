@@ -43,7 +43,7 @@ export function formatTime(value: ConfigType): string {
 
 export function formatDate(value: ConfigType): string {
   const date = dayjs(value);
-  return date.isValid() ? date.format('dddd, DD MMMM YYYY') : '--';
+  return date.isValid() ? date.format('D-MMM-YYYY') : '--';
 }
 
 export function formatDateTime(value?: ConfigType): string {
@@ -52,7 +52,7 @@ export function formatDateTime(value?: ConfigType): string {
   }
 
   const date = dayjs(value);
-  return date.isValid() ? date.format('DD MMM YYYY, hh:mm:ss A') : '--';
+  return date.isValid() ? date.format('D-MMM-YYYY, hh:mm:ss A') : '--';
 }
 
 export function formatMinutesAsClock(totalMinutes: number): string {
