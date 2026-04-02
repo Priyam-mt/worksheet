@@ -5,5 +5,3 @@ export interface Session {
 }
 
 export type DayStatus = 'idle' | 'working' | 'break' | 'ended';
-
-export type ThemeMode = 'light' | 'dark';

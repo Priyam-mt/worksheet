@@ -24,10 +24,10 @@ export function StatsCard({
 }: StatsCardProps) {
   return (
     <article
-      className={`rounded-[24px] border p-5 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm ${toneClasses[tone]}`}
+      className={`rounded-[24px] border p-4 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm sm:p-5 ${toneClasses[tone]}`}
     >
       <p className="text-sm font-medium text-slate-500 dark:text-slate-300">{label}</p>
-      <p className="mt-4 font-['Space_Grotesk',_'Segoe_UI',_sans-serif] text-3xl font-semibold tracking-tight text-slate-950 dark:text-white">
+      <p className="mt-3 font-['Space_Grotesk',_'Segoe_UI',_sans-serif] text-2xl font-semibold tracking-tight text-slate-950 dark:text-white sm:mt-4 sm:text-3xl">
         {value}
       </p>
       <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{helper}</p>

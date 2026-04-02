@@ -43,7 +43,7 @@ export function ActionButtons() {
   const hasSessions = sessions.length > 0;
 
   return (
-    <section className="rounded-[28px] border border-white/60 bg-white/75 p-6 shadow-[0_24px_60px_-40px_rgba(15,23,42,0.45)] backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/70">
+    <section className="rounded-[28px] border border-white/60 bg-white/75 p-5 shadow-[0_24px_60px_-40px_rgba(15,23,42,0.45)] backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/70 sm:p-6">
       <div className="flex flex-col gap-4">
         <div>
           <h2 className="font-['Space_Grotesk',_'Segoe_UI',_sans-serif] text-xl font-semibold text-slate-950 dark:text-white">
@@ -54,7 +54,7 @@ export function ActionButtons() {
           </p>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
           <ActionButton
             label="Start Day"
             onClick={startDay}

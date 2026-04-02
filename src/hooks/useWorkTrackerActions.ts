@@ -5,12 +5,13 @@ export function useWorkTrackerActions() {
   const takeBreak = useWorkTrackerStore((state) => state.takeBreak);
   const resumeWork = useWorkTrackerStore((state) => state.resumeWork);
   const endDay = useWorkTrackerStore((state) => state.endDay);
+  const addManualSession = useWorkTrackerStore((state) => state.addManualSession);
   const syncDayBoundary = useWorkTrackerStore((state) => state.syncDayBoundary);
-  const toggleTheme = useWorkTrackerStore((state) => state.toggleTheme);
   const markAlertTriggered = useWorkTrackerStore((state) => state.markAlertTriggered);
   const resetAlertFlags = useWorkTrackerStore((state) => state.resetAlertFlags);
 
   return {
+    addManualSession,
     endDay,
     markAlertTriggered,
     resetAlertFlags,
@@ -18,6 +19,5 @@ export function useWorkTrackerActions() {
     startDay,
     syncDayBoundary,
     takeBreak,
-    toggleTheme,
   };
 }

@@ -13,6 +13,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  color-scheme: dark;
+  background-color: #020617;
+}
+
 html,
 body,
 #root {
@@ -21,6 +26,7 @@ body,
 
 body {
   margin: 0;
+  min-width: 320px;
 }
 
 button,
@@ -28,4 +34,11 @@ input,
 select,
 textarea {
   font: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  touch-action: manipulation;
 }
