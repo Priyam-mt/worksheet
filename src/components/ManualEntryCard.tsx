@@ -21,22 +21,24 @@ export function ManualEntryCard() {
   const [isOpenSession, setIsOpenSession] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [feedbackTone, setFeedbackTone] = useState<'error' | 'success'>('success');
-  const { addManualSession } = useWorkTrackerActions();
+  const { addManualSession, completeActiveSession } = useWorkTrackerActions();
   const trackingDate = useWorkTrackerStore((state) => state.trackingDate);
   const sessions = useWorkTrackerStore((state) => state.sessions);
-  const hasActiveSession = sessions.some((session) => !session.end);
+  const activeSession = sessions.findLast((session) => !session.end);
+  const hasActiveSession = Boolean(activeSession);
   const baseDate = trackingDate ?? dayjs().format('YYYY-MM-DD');
   const displayDate = formatDate(baseDate);
+  const activeStartTime = activeSession ? dayjs(activeSession.start).format('HH:mm') : null;
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const start = dayjs(`${baseDate}T${startTime}`);
-    const end = dayjs(`${baseDate}T${endTime}`);
-    const result = addManualSession(
-      start.toISOString(),
-      isOpenSession ? undefined : end.toISOString(),
-    );
+    const result = hasActiveSession
+      ? completeActiveSession(dayjs(`${baseDate}T${endTime}`).toISOString())
+      : addManualSession(
+          dayjs(`${baseDate}T${startTime}`).toISOString(),
+          isOpenSession ? undefined : dayjs(`${baseDate}T${endTime}`).toISOString(),
+        );
 
     if (!result.success) {
       setFeedbackTone('error');
@@ -46,9 +48,11 @@ export function ManualEntryCard() {
 
     setFeedbackTone('success');
     setFeedback(
-      isOpenSession
-        ? 'Active manual session started from the selected time.'
-        : "Manual entry added to today's timeline.",
+      hasActiveSession
+        ? 'Manual out time saved for the active session.'
+        : isOpenSession
+          ? 'Active manual session started from the selected time.'
+          : "Manual entry added to today's timeline.",
     );
   };
 
@@ -60,16 +64,18 @@ export function ManualEntryCard() {
             Manual Entry
           </h2>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-            Missed the buttons? Add a completed session or start an active one from an earlier time.
+            Missed the buttons? Add a completed session, start one from an earlier time, or close a forgotten active session with a manual out time.
           </p>
         </div>
 
         <form className="grid gap-4 md:grid-cols-[1fr_1fr_auto]" onSubmit={handleSubmit}>
           <label className="space-y-2">
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Start time</span>
+            <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
+              {hasActiveSession ? 'Active start time' : 'Start time'}
+            </span>
             <input
               type="time"
-              value={startTime}
+              value={hasActiveSession && activeStartTime ? activeStartTime : startTime}
               onChange={(event) => setStartTime(event.target.value)}
               disabled={hasActiveSession}
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-sky-400 dark:border-white/10 dark:bg-slate-800 dark:text-white"
@@ -82,7 +88,7 @@ export function ManualEntryCard() {
               type="time"
               value={endTime}
               onChange={(event) => setEndTime(event.target.value)}
-              disabled={hasActiveSession || isOpenSession}
+              disabled={isOpenSession}
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-sky-400 dark:border-white/10 dark:bg-slate-800 dark:text-white"
             />
           </label>
@@ -90,10 +96,10 @@ export function ManualEntryCard() {
           <div className="flex items-end">
             <button
               type="submit"
-              disabled={hasActiveSession}
-              className="w-full rounded-2xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:bg-emerald-300 dark:disabled:bg-emerald-900/60 md:w-auto"
+              disabled={isOpenSession && hasActiveSession}
+              className="w-full cursor-pointer rounded-2xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:bg-emerald-300 dark:disabled:bg-emerald-900/60 md:w-auto"
             >
-              {isOpenSession ? 'Start From Time' : 'Add Entry'}
+              {hasActiveSession ? 'Save Out Time' : isOpenSession ? 'Start From Time' : 'Add Entry'}
             </button>
           </div>
         </form>
@@ -104,7 +110,7 @@ export function ManualEntryCard() {
             checked={isOpenSession}
             onChange={(event) => setIsOpenSession(event.target.checked)}
             disabled={hasActiveSession}
-            className="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500 dark:border-white/20 dark:bg-slate-800 sm:mt-0"
+            className="mt-0.5 h-4 w-4 cursor-pointer rounded border-slate-300 text-sky-600 focus:ring-sky-500 disabled:cursor-not-allowed dark:border-white/20 dark:bg-slate-800 sm:mt-0"
           />
           Keep this session active and resume from the selected start time
         </label>
@@ -116,7 +122,7 @@ export function ManualEntryCard() {
           </p>
           {hasActiveSession ? (
             <p className="text-amber-600 dark:text-amber-300">
-              Finish the current live session before adding another manual one.
+              A live session is open. Add the missing out time here to close it without losing the original in time.
             </p>
           ) : isOpenSession ? (
             <p className="text-sky-600 dark:text-sky-300">
