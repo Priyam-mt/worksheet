@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import { ActionButtons } from './components/ActionButtons';
+import { CalendarScheduleCard } from './components/CalendarScheduleCard';
 import { DashboardHeader } from './components/DashboardHeader';
 import { LiveTimerCard } from './components/LiveTimerCard';
 import { ManualEntryCard } from './components/ManualEntryCard';
+import { PushNotificationPanel } from './components/PushNotificationPanel';
 import { SessionTable } from './components/SessionTable';
 import { StatsCard } from './components/StatsCard';
 import { useDarkMode } from './hooks/useDarkMode';
@@ -73,6 +75,8 @@ function App() {
           <section className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr] xl:items-start xl:gap-6">
             <div className="order-2 space-y-5 xl:order-1 xl:space-y-6">
               <ActionButtons />
+              <PushNotificationPanel />
+              <CalendarScheduleCard />
               <ManualEntryCard />
               <SessionTable rows={sessionRows} />
             </div>

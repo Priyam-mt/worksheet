@@ -322,7 +322,7 @@ export const useWorkTrackerStore = create<WorkTrackerState>()(
           sessions: sortedSessions,
           dayStatus: getDayStatusForSessions(dayStatus, sortedSessions),
           trackingDate: trackingDate ?? getTodayKey(),
-        });`  `
+        });
 
         return { success: true };
       },
